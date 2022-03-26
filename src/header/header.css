@@ -1,0 +1,23 @@
+.page-header{
+    display: flex;
+    max-height: 3rem;
+    justify-content: space-between;
+    background-color: black;
+    color: blue;
+    padding: 0.5rem;
+}
+.app-info{
+    display: flex;
+}
+.header-img{
+    max-height: 3rem;
+    width:3rem;
+}
+.page-heading{
+    margin: 0.25rem;
+    /* margin-bottom: 0.5; */
+}
+.login-button{
+    background-color: black;
+    border:none;
+}
