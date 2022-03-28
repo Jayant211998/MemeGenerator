@@ -1,6 +1,9 @@
 import './main.css'
 import React from "react"
 import {SketchPicker} from "react-color"
+import images from "../components/images"
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 export default function Main(){
     
@@ -9,9 +12,13 @@ export default function Main(){
     const [reRender,setReRender]= React.useState(false)
     const [inputArray, setInputArray] = React.useState([])
     const [memeData,setMemeData] = React.useState({   
-        img:"https://static.langimg.com/thumb/msid-76057636,width-680,resizemode-3/navbharat-times.jpg",
+        img:"",
         text:[]
     })
+    const [templateNum,setTemplateNum] =  React.useState(0)
+    // const [images,setImages] = React.useState(images[templateNum])
+    // console.log(images[templateNum])
+
     function handelChange(event){
         const {name, value} = event.target
         setMemeData(prevMeme => {
@@ -138,17 +145,16 @@ export default function Main(){
     return( 
         <center>
         <main className="main">
+        <div className="image-section">    
+        <button type="button" className="image-change-button" onClick={()=>{setTemplateNum(templateNum>0?templateNum-1:images.length-1)}}><ArrowBackIosIcon/></button>
             <div className="meme-img" 
-                    style={{
-                        backgroundImage: "url(" + 'https://static.langimg.com/thumb/msid-76057636,width-680,resizemode-3/navbharat-times.jpg'+")",
-                        backgroundPosition: 'center',
-                        backgroundSize: 'contain',
-                        backgroundRepeat: 'no-repeat'
-                        }}
                 id="image"
             >
+                <img src={images[templateNum]} alt="meme-image" color="white" className="image"></img>
             {memeContent}
             </div>
+        <button type="button" className="image-change-button" onClick={()=>{setTemplateNum(templateNum<images.length-1?templateNum+1:0)}}><ArrowForwardIosIcon/></button>
+        </div>
             <div className="meme-content">
                 <h1>Add Content</h1>
                 <form className="forms">
@@ -162,7 +168,7 @@ export default function Main(){
                         onClick={addInputField}
                     >Add Text
                     </button><br/>
-                    <input type='text' placeholder="Search" name='search' id='search' className="input"></input><br/>
+                    <button type='button'  name='upload' id='upload' className="input">Upload You Image</button><br/>
                     <button type="submit" name="save" id="save" className="button" >Save</button>
                     <button type="submit" name="download" id="download" className="button">Download Your Image</button>
                     <div className='sm-handels'>

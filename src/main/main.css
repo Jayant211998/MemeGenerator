@@ -1,19 +1,32 @@
 .main{
-    display: block;
+    display: flex;
     margin-top: 2rem ;
     width: 100%;
-    margin-left:2rem;
+    /* margin-left:2rem; */
 }
 
 .meme-img{
-    margin: 0 auto  ;
+    /* margin: 0 auto  ; */
     min-height: 30rem;
-    min-width: 30rem;
-    max-height: 50rem;
-    max-width: 70rem;
+    min-width: 40rem;
+    max-height: 30rem;
+    max-width: 40rem;
     position: relative;
     background-color:  black;
 
+}
+.image{
+    min-height: 30rem;
+    min-width: 40rem;
+    max-height: 30rem;
+    max-width: 40rem;
+}
+.image-section{
+    display: flex;
+    /* justify-content: space-between; */
+}
+.image-change-button{
+    background-color: transparent;
 }
 .meme-content{
     margin: 0 auto  ;
