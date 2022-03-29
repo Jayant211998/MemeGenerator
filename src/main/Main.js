@@ -4,6 +4,9 @@ import {SketchPicker} from "react-color"
 import images from "../components/images"
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import * as htmlToImage from 'html-to-image'
+import { saveAs } from 'file-saver';
+
 
 export default function Main(){
     
@@ -16,8 +19,8 @@ export default function Main(){
         text:[]
     })
     const [templateNum,setTemplateNum] =  React.useState(0)
-    // const [images,setImages] = React.useState(images[templateNum])
-    // console.log(images[templateNum])
+    const [selectedImage, setSelectedImage] = React.useState(null);
+
 
     function handelChange(event){
         const {name, value} = event.target
@@ -65,11 +68,9 @@ export default function Main(){
             return newstyle
         })
     }    
-    function setContent(event){
-        
+    function setContent(event){        
         const id = event.target.id
-        const content = document.getElementById(id)
-       
+        const content = document.getElementById(id)       
         content.onmousedown = function(event) {
         let shiftX = event.clientX - content.getBoundingClientRect().left;
         let shiftY = event.clientY - content.getBoundingClientRect().top;
@@ -82,7 +83,6 @@ export default function Main(){
             content.style.left = pageX - content.offsetWidth / 2 + 'px';
             content.style.top = pageY - content.offsetHeight / 2 + 'px';
           }
-        // moveAt(event.pageX, event.pageY);
         function onMouseMove(event) {
             moveAt(event.pageX, event.pageY);
           }
@@ -91,19 +91,37 @@ export default function Main(){
             document.getElementById("image").removeEventListener('mousemove', onMouseMove);
             document.getElementById("image").onclick = null;
               };        
-
         }  
         document.getElementById("image").ondragstart = function() {
         return false;
-        };
-        
+        };        
     }
+
+    // function downloadURI(uri, name) {
+    //     var link = document.createElement("a");
+    
+    //     link.download = name;
+    //     link.href = uri;
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     // clearDynamicLink(link); 
+    // }
+    
+    function DownloadAsImage() {
+            htmlToImage.toPng(document.getElementById("image"))
+             .then(function (dataUrl) {
+                saveAs(dataUrl, 'meme.png');
+                console.log(dataUrl)
+             });
+    }
+
+
+
     const memeContent = inputArray.map((field) => {      
         return  <p
         id={"p"+field}
         style={{color: textColors[field],
         position:'absolute',
-        // zIndex: 1000,
         }}
         onMouseDown = {(event)=>{setContent(event)}}
         >
@@ -137,7 +155,6 @@ export default function Main(){
             </div>
             <SketchPicker  id={"color"+field} color={textColors[field]} onChange={(color)=>{changeColor(field,color)}}/>
             </div>}          
-            {/* <Titles field={field} textColors={textColors} memeData={memeData}></Titles> */}
         
         </div>
             )
@@ -147,10 +164,8 @@ export default function Main(){
         <main className="main">
         <div className="image-section">    
         <button type="button" className="image-change-button" onClick={()=>{setTemplateNum(templateNum>0?templateNum-1:images.length-1)}}><ArrowBackIosIcon/></button>
-            <div className="meme-img" 
-                id="image"
-            >
-                <img src={images[templateNum]} alt="meme-image" color="white" className="image"></img>
+            <div className="meme-img" id="image" >
+                <img src={selectedImage?URL.createObjectURL(selectedImage):images[templateNum]} alt="meme-image" color="white" className="image"></img>
             {memeContent}
             </div>
         <button type="button" className="image-change-button" onClick={()=>{setTemplateNum(templateNum<images.length-1?templateNum+1:0)}}><ArrowForwardIosIcon/></button>
@@ -167,10 +182,27 @@ export default function Main(){
                         className="button" 
                         onClick={addInputField}
                     >Add Text
-                    </button><br/>
-                    <button type='button'  name='upload' id='upload' className="input">Upload You Image</button><br/>
-                    <button type="submit" name="save" id="save" className="button" >Save</button>
-                    <button type="submit" name="download" id="download" className="button">Download Your Image</button>
+                    </button><br/><br></br>
+                    {!selectedImage &&   <input
+                        style={{color:"white"}}
+                        
+                        type="file"
+                        name="myImage"
+                        className="myImage"
+                        onChange={(event) => {
+                        // console.log(event.target.files[0]);
+                        setSelectedImage(event.target.files[0]);
+                        }}
+                    />}
+                    {selectedImage&&<button type="button" name="remove" id="remove" className="remove-button" 
+                    onClick={()=>{setSelectedImage(null)}}>
+                        Remove Image
+                    </button>}
+                    <br/><br/>
+                    {/* <button type="submit" name="save" id="save" className="button" >Save</button> */}
+                    <button type="submit" name="download" id="download" className="button" 
+                    onClick={()=>{DownloadAsImage()}}
+                    >Download Your Template</button>
                     <div className='sm-handels'>
                         <button className="handel-button"><img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="facebook" className="handel"></img></button>
                         <button className="handel-button"><img src="https://parentzone.org.uk/sites/default/files/Instagram%20logo.jpg" alt="instagram" className="handel"></img></button>
