@@ -72,8 +72,8 @@ export default function Main(){
         const id = event.target.id
         const content = document.getElementById(id)       
         content.onmousedown = function(event) {
-        let shiftX = event.clientX - content.getBoundingClientRect().left;
-        let shiftY = event.clientY - content.getBoundingClientRect().top;
+        // let shiftX = event.clientX - content.getBoundingClientRect().left;
+        // let shiftY = event.clientY - content.getBoundingClientRect().top;
         
         content.style.position = 'absolute';
         content.style.zIndex=1000
@@ -90,6 +90,7 @@ export default function Main(){
         document.getElementById("image").onclick = function() {
             document.getElementById("image").removeEventListener('mousemove', onMouseMove);
             document.getElementById("image").onclick = null;
+
               };        
         }  
         document.getElementById("image").ondragstart = function() {
@@ -114,7 +115,6 @@ export default function Main(){
                 console.log(dataUrl)
              });
     }
-
 
 
     const memeContent = inputArray.map((field) => {      
@@ -164,8 +164,15 @@ export default function Main(){
         <main className="main">
         <div className="image-section">    
         <button type="button" className="image-change-button" onClick={()=>{setTemplateNum(templateNum>0?templateNum-1:images.length-1)}}><ArrowBackIosIcon/></button>
-            <div className="meme-img" id="image" >
-                <img src={selectedImage?URL.createObjectURL(selectedImage):images[templateNum]} alt="meme-image" color="white" className="image"></img>
+            <div className="meme-img" id="image"       
+                    style={{ backgroundImage: selectedImage?"url("+URL.createObjectURL(selectedImage)+")":"url("+images[templateNum]+')',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat'
+
+                    }}
+>
+                {/* <img src={selectedImage?URL.createObjectURL(selectedImage):images[templateNum]} alt="meme-image" color="white" className="image"></img> */}
             {memeContent}
             </div>
         <button type="button" className="image-change-button" onClick={()=>{setTemplateNum(templateNum<images.length-1?templateNum+1:0)}}><ArrowForwardIosIcon/></button>
@@ -200,7 +207,7 @@ export default function Main(){
                     </button>}
                     <br/><br/>
                     {/* <button type="submit" name="save" id="save" className="button" >Save</button> */}
-                    <button type="submit" name="download" id="download" className="button" 
+                    <button type="button" name="download" id="download" className="button" 
                     onClick={()=>{DownloadAsImage()}}
                     >Download Your Template</button>
                     <div className='sm-handels'>
